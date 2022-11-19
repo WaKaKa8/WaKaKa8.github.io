@@ -96,91 +96,92 @@
 <h4 id="Task-1-Getting-Familiar-with-Shellcode"><a href="#Task-1-Getting-Familiar-with-Shellcode" class="headerlink" title="Task 1:Getting Familiar with Shellcode"></a>Task 1:Getting Familiar with Shellcode</h4><p>关闭地址随机化</p>
 <p>将/bin/sh 链接到 zsh：$sudo ln-sf /bin/zsh /bin/sh</p>
 <p>打开shellcode文件夹，输入命令make（由makefile提供）</p>
-<p>a32.out/a64.out生成<img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image002.png" alt="img"></p>
+<p>a32.out/a64.out生成<img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image001.png"></p>
 <p>执行a32.out和a64.out</p>
 <p>出现$，shell被打开了，说明执行了shellcode（malicious code）。</p>
 <p>可直接exit退出（我这里查看了下id，非必须步骤）</p>
 <p><code>注：</code> （题目不要求）未取得特权是因为task1不要求将程序改为setuid程序。在这里我们可以在两次gcc后，分别给a32.out和a64.out来setuid（chown，chmod）就可以取得特权</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image004.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image006.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image004.png" alt="clip_image004"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image006.png" alt="clip_image006"></p>
 <h4 id="Task2-Understanding-the-Vulnerable-Program"><a href="#Task2-Understanding-the-Vulnerable-Program" class="headerlink" title="Task2:Understanding the Vulnerable Program"></a>Task2:Understanding the Vulnerable Program</h4><p>直接make（由makefile提供）</p>
 <p>生成用于后续4个level实验的文件</p>
 <p>（每个level有1个被攻击文件1个debug文件）</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image008.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image008.png"></p>
 <h4 id="Task-3-Launching-Attack-on-32-bit-Program-Level1"><a href="#Task-3-Launching-Attack-on-32-bit-Program-Level1" class="headerlink" title="Task 3: Launching Attack on 32-bit Program (Level1)"></a>Task 3: Launching Attack on 32-bit Program (Level1)</h4><p>按照指导书调试stack-L1-dbg获取ebp和buffer位置</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image010.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image012.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image010.png"><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image012.png"></p>
 <p>我这里的得到的位置如下：</p>
 <p>$获取值，ebp的值为该指针所指位置</p>
 <p>&amp;获取地址，buffer地址即为buffer初始位置</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image014.png" alt="img"></p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image016.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image014.png"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image016.png"></p>
 <p>修改exploit.py文件</p>
 <p>将恶意代码的32位汇编粘贴至shellcode</p>
 <p>汇编代码在指导书上，labsetup/shellcode/call_shellcode.c中也有</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image018.png" alt="img"></p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image020.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image022.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image018.png"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image020.png"><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image022.png"></p>
 <p>执行！</p>
 <p>#表示获取了特权shell</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image024.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image024.png"></p>
 <p><code>详解：</code> </p>
 <p><code>Start</code>为图二中shellcode（malicious code）在badfile中的位置。badfile长度517，malicious code在末尾，所以malicious code 起始位置为517-shellcode</p>
 <p><code>Offset</code>为存放返回位置的内存格与buffer距离bsp-buffer+1单元（4字节），新的返回地址内容要覆盖旧返回地址的内容，所以它们应为栈中相同位置</p>
 <p><code>Ret</code>为新的返回位置，malicious code 在badfile中是在start位置。由于strcpy操作使badfile在栈中位置对应于buffer[0]。由此推出malicious code 在栈中位置为<!--buffer+start--></p>
-<p><img src="C:\Users\MmmmmmY\AppData\Roaming\Typora\typora-user-images\image-20221119011904641.png" alt="image-20221119011904641"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\image-20221119011904641.png"></p>
 <h4 id="Task-4-Launching-Attack-without-Knowing-Buffer-Size-Level-2"><a href="#Task-4-Launching-Attack-without-Knowing-Buffer-Size-Level-2" class="headerlink" title="Task 4: Launching Attack without Knowing Buffer Size (Level 2)"></a>Task 4: Launching Attack without Knowing Buffer Size (Level 2)</h4><p>不需要再生成badfile</p>
 <p>按上述步骤调试stack-L2-dbg</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image026.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image026.png"></p>
 <p>由题意不允许查询buffer长度，即无法得知offset，不允许查看ebp位置</p>
 <p>所以只能查看buffer位置</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image028.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image028.png"></p>
 <p>修改exploit.py</p>
 <p>Shellcode不需要更改，更改Ret</p>
 <p>因为不能确定offset具体值，只能给一个范围</p>
 <p>Buffer长度范围指导书中给出。</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image030.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image030.png"></p>
 <p>level2的Buffer长度是100-200，返回地址所在单元格与buffer末位置隔了一个单元格（放ebp）所以offset范围为104-204（即把这些单元格都填上新的返回地址，总有一个是覆盖了原返回地址的。）</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image032.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image034.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image032.png"><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image034.png"></p>
 <p>运行！获取了特权shell</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image036.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image036.png"></p>
 <h4 id="Task-5-Launching-Attack-on-64-bit-Program-Level-3"><a href="#Task-5-Launching-Attack-on-64-bit-Program-Level-3" class="headerlink" title="Task 5: Launching Attack on 64-bit Program (Level 3)"></a>Task 5: Launching Attack on 64-bit Program (Level 3)</h4><h4 id="Task-6-Launching-Attack-on-64-bit-Program-Level-4"><a href="#Task-6-Launching-Attack-on-64-bit-Program-Level-4" class="headerlink" title="Task 6: Launching Attack on 64-bit Program (Level 4)"></a>Task 6: Launching Attack on 64-bit Program (Level 4)</h4><h4 id="Tasks-7-Defeating-dash’s-Countermeasure"><a href="#Tasks-7-Defeating-dash’s-Countermeasure" class="headerlink" title="Tasks 7: Defeating dash’s Countermeasure"></a>Tasks 7: Defeating dash’s Countermeasure</h4><h5 id="Task-7-a-Run-the-shellcode-a32-out-and-a64-out-with-or-without-the-setuid-0-system-call"><a href="#Task-7-a-Run-the-shellcode-a32-out-and-a64-out-with-or-without-the-setuid-0-system-call" class="headerlink" title="Task 7.a: Run the shellcode a32.out and a64.out with or without the setuid(0) system call."></a>Task 7.a: Run the shellcode a32.out and a64.out with or without the setuid(0) system call.</h5><p>链接至dash</p>
 <p>Make setuid后未获得特权shell，id都为seed</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image038.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image040.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image038.png"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image040.png" alt="img"></p>
 <p>修改call_shellcode.c</p>
 <p>将setuid(0)加入到shellcode</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image042.png" alt="img"><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image044.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image042.png"><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image044.png"></p>
 <p>再次make setuid。获取特权。此时的uid为root</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image046.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image046.png"></p>
 <h5 id="Task7-b-Using-the-updated-shellcode-with-the-shell’s-countermeasure-turned-on-Repeat-attack-on-Level-1"><a href="#Task7-b-Using-the-updated-shellcode-with-the-shell’s-countermeasure-turned-on-Repeat-attack-on-Level-1" class="headerlink" title="Task7.b: Using the updated shellcode, with the shell’s countermeasure turned on. Repeat attack on Level 1"></a>Task7.b: Using the updated shellcode, with the shell’s countermeasure turned on. Repeat attack on Level 1</h5><p>修改exploit.py</p>
-<p>Shellcode中加入setuid(0)<img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image048.png" alt="img"></p>
+<p>Shellcode中加入setuid(0)<img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image048.png"></p>
 <p>重复对L1的攻击</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image050.png" alt="img"></p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image052.png" alt="img"></p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image054.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image050.png"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image052.png"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image054.png"></p>
 <p>执行！在dash的链接下也能获取特权</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image056.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image056.png"></p>
 <h4 id="Task-8-Defeating-Address-Randomization"><a href="#Task-8-Defeating-Address-Randomization" class="headerlink" title="Task 8: Defeating Address Randomization"></a>Task 8: Defeating Address Randomization</h4><p>开启地址随机化（即每次编译stack.c，buffer存放的位置不一样，也就是说我们无法通过对stack-L1-dbg的调试得到stack-L1中buffer位置，因为两次编译使得两个文件中buffer确切位置不一样。</p>
 <p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image057.png" alt="img"></p>
 <p>重复对L1的攻击，发生段错误</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image059.png" alt="img"></p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image061.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image059.png"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image061.png"></p>
 <p>执行brute-force.sh（该脚本暴力遍历地址，直到遍历到正确的buffer地址，因为offset不变所以可以有效更改返回地址）</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image063.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image063.png"></p>
 <p>等待，获取特权shell</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image065.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image065.png" alt="clip_image065"></p>
 <h4 id="Tasks-9-Experimenting-with-Other-Countermeasures"><a href="#Tasks-9-Experimenting-with-Other-Countermeasures" class="headerlink" title="Tasks 9: Experimenting with Other Countermeasures"></a>Tasks 9: Experimenting with Other Countermeasures</h4><p>打开makefile。发现有两个flag。</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image067.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image067.png"></p>
 <h5 id="Task-9-a-Turn-on-the-StackGuard-Protection"><a href="#Task-9-a-Turn-on-the-StackGuard-Protection" class="headerlink" title="Task 9.a: Turn on the StackGuard Protection"></a>Task 9.a: Turn on the StackGuard Protection</h5><p>无stackguard（即为Task3）</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image069.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image069.png"></p>
 <p>有stackguard（即编译中不用-fno-stack-protector）</p>
 <p>task2中用下面的命令编译stack.c</p>
-<p><img src="C:\Users\MmmmmmY\AppData\Roaming\Typora\typora-user-images\image-20221119125029112.png" alt="image-20221119125029112"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\image-20221119125029112.png"></p>
 <p>在这里我们去掉-fno-stack-protector，把stack-L1改为stack-L1_也就是新生成的文件。输入命令。</p>
 <p>执行！发现栈溢出，丢弃 </p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image073.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image073.png"></p>
 <h5 id="Task-9-b-Turn-on-the-Non-executable-Stack-Protection"><a href="#Task-9-b-Turn-on-the-Non-executable-Stack-Protection" class="headerlink" title="Task 9.b: Turn on the Non-executable Stack Protection"></a>Task 9.b: Turn on the Non-executable Stack Protection</h5><p>没有不可执行栈保护机制（即为Task1）</p>
-<p><img src="file:///C:/Users/MmmmmmY/AppData/Local/Temp/msohtmlclip1/01/clip_image075.png" alt="img"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\clip_image075.png"></p>
 <p>有Non-executable Stack Protection（即编译中不用-z execstack或者把它改为-z noexecstack）</p>
 <p>编译执行，发生段错误</p>
-<p><img src="C:\Users\MmmmmmY\AppData\Roaming\Typora\typora-user-images\image-20221119134620747.png" alt="image-20221119134620747"></p>
+<p><img src="D:\博客搭建\Hexo_Blog\source_posts\Buffer-Overflow-Attack-Lab-Set-UID-Version\image-20221119134620747.png"></p>
 
       
     </div>
